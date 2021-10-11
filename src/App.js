@@ -1,25 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {Component} from 'react';
+import {axiosInstance} from "./axiosInstance";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  componentDidMount() {
+    this.callAPI()
+  }
+
+  async callAPI() {
+    const consumerKey = process.env.REACT_APP_BASE_CONSUMER_KEY || ''
+    const consumerSecret = process.env.REACT_APP_BASE_CONSUMER_SECRET || ''
+
+    try {
+      this.paginationLoading = true
+
+      await axiosInstance.get(
+          '/wc-api/v3/products/count',
+              {
+                auth: {
+                  username: consumerKey,
+                  password: consumerSecret,
+                },
+              },
+      ).then((data) => {
+        console.log(data)
+      })
+    } catch (e) {
+      console.log(e)
+      throw Error(e)
+    }
+  }
+  render() {
+    return (
+        <div>
+          View console
+        </div>
+    );
+  }
 }
+
 
 export default App;
